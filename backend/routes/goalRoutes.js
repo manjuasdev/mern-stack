@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {getGoals, setGoal, putGoal, deleteGoal} = require('../controllers/goalController')
+const {protect} = require('../middleware/authMiddleware')
 
 //router.get('/', getGoals)
 
@@ -8,7 +9,7 @@ const {getGoals, setGoal, putGoal, deleteGoal} = require('../controllers/goalCon
 //router.post('/', setGoals)
 
 //Both get and post having same path so combining line 5 and line 8 
-router.route('/').get(getGoals).post(setGoal)
+router.route('/').get(protect, getGoals).post(protect, setGoal)
 
 //update
 //router.put('/:id', putGoals)
@@ -17,6 +18,6 @@ router.route('/').get(getGoals).post(setGoal)
 //router.delete('/:id', deleteGoals)
 
 //Both get and post having same path so combining line 15 and line 18 
-router.route('/:id').put(putGoal).delete(deleteGoal)
+router.route('/:id').put(protect, putGoal).delete(protect, deleteGoal)
 
 module.exports = router
