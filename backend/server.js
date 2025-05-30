@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const goalRoutes = require('./routes/goalRoutes');
 const userRoutes = require('./routes/userRotes');
 const { errorHandler } = require('./middleware/errorMiddleware')
+const path = require('path')
 
 connectDB();
 
@@ -16,6 +17,16 @@ app.use(express.urlencoded({extended: false}))
 
 app.use('/api/goals', goalRoutes)
 app.use('/api/users', userRoutes)
+
+// Server frontend
+if(process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, "../frontend/build")))
+
+    app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, "../", "frontend", "build", "index.html")))
+}
+else {
+    app.get('/', (req, res) => res.send('Please set to production'))
+}
 
 app.use(errorHandler)
 
